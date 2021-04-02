@@ -41,4 +41,3 @@ internal fun matrixBuilder(height: Int, width: Int, builder: (Int, Int) -> Int):
             builder(h,w)
         }
     }
-

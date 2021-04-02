@@ -31,8 +31,16 @@ class SimpleTest {
     }
 
     @Test
-    fun `times matrixBig`() {
+    fun `times matrix various`() {
         (10 until 200 step 10).forEach { i ->
+            val m1 = StrassenMatrix(matrixBuilder(i, i) { h: Int, w: Int -> h + w })
+            assertTrue(m1 as Matrix * m1 as Matrix == m1 * m1)
+        }
+    }
+
+    @Test
+    fun `times big matrix`() {
+        generateSequence(16) { it * 2 }.takeWhile { it <= 512 }.forEach { i ->
             val m1 = StrassenMatrix(matrixBuilder(i, i) { h: Int, w: Int -> h + w })
             val matrix: Matrix
             val stMatrix: StrassenMatrix

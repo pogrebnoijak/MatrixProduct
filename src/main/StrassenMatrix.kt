@@ -24,7 +24,7 @@ class StrassenMatrix(matrix: AArray<Int>) : Matrix(matrix) {
 private fun times(mat1: AArray<Int>, mat2: AArray<Int>, scale: Int): AArray<Int> {
     val newScale = scale/2
 
-    fun sum(x1: Int, y1: Int, x2: Int, y2: Int, isM1: Boolean, op: (Int, Int) -> Int): AArray<Int>{
+    fun sum(x1: Int, y1: Int, x2: Int, y2: Int, isM1: Boolean, op: (Int, Int) -> Int): AArray<Int> {
         return when (Pair(isM1, x2 == -1 && y2 == -1)) {
             true to true    -> matrixBuilder(newScale, newScale) {
                     h: Int, w: Int -> mat1[h + x1][w + y1] }
@@ -43,7 +43,7 @@ private fun times(mat1: AArray<Int>, mat2: AArray<Int>, scale: Int): AArray<Int>
         fun trans(a: Int) = when(a) {
             1       -> 0
             2       -> newScale
-            else    -> -1
+            else    -> -1 // no exists
         }
         return times(
             sum(trans(a1.first), trans(a1.second), trans(a2.first), trans(a2.second), true, opA),
@@ -52,9 +52,9 @@ private fun times(mat1: AArray<Int>, mat2: AArray<Int>, scale: Int): AArray<Int>
         )
     }
 
-    if (scale == 1) return arrayOf(arrayOf(mat1[0][0] * mat2[0][0]))
-    if (scale == 2) return matrixBuilder(scale, scale) {
-            h: Int, w: Int -> mat1[h][0] * mat2[0][w] + mat1[h][1] * mat2[1][w] }
+    if (scale <= 64) return matrixBuilder(scale, scale) { h: Int, w: Int -> // 64 optimal
+        (0 until scale).sumBy { i -> mat1[h][i] * mat2[i][w] }
+    }
 
     val m1 = getM(Pair(1,1), Pair(2,2), Pair(1,1), Pair(2,2))
     val m2 = getM(Pair(2,1), Pair(2,2), Pair(1,1), Pair(-1,-1))
@@ -75,8 +75,3 @@ private fun times(mat1: AArray<Int>, mat2: AArray<Int>, scale: Int): AArray<Int>
         }
     }
 }
-
-//private fun timesFast(mat1: AArray<Int>, mat2: AArray<Int>, scale: Int): AArray<Int> {
-//    // later
-//    return mat1
-//}
