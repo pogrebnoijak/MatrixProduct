@@ -1,6 +1,7 @@
 package main
 
 typealias AArray<T> = Array<Array<T>>
+typealias AAArray<T> = Array<Array<Array<T>>>
 
 open class Matrix(val width: Int, val height: Int, val matrix: AArray<Int>) {
     init {
